@@ -4,12 +4,12 @@ import styles from './Card.scss';
 
 class Card extends React.Component {
   static propTypes = {
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
   }
   render() {
     return (
       <p className={styles.component}>{this.props.title}</p>
-    )
+    );
   }
 }
 
