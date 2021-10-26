@@ -1,4 +1,5 @@
 import React from 'react';
+import {Droppable} from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import styles from './Column.scss';
 import Card from '../Card/Card.js';
@@ -12,12 +13,13 @@ class Column extends React.Component {
     cards: PropTypes.array.isRequired,
     addCard: PropTypes.func.isRequired,
     icon: PropTypes.string,
+    id: PropTypes.string,
   };
   static defaultProps = {
     icon: settings.defaultColumnIcon,
   };
   render() {
-    const {title, icon, cards, addCard} = this.props;
+    const {title, icon, cards, addCard, id} = this.props;    
     return (
       <section className={styles.component}>
         <h3 className={styles.title}>
@@ -26,9 +28,16 @@ class Column extends React.Component {
             <Icon name={icon}/>
           </span>
         </h3>
-        {cards.map(cardData => (
-          <Card key={cardData.id} {...cardData}/>
-        ))}
+        <Droppable droppableId={id}>
+          {provided => (
+            <div className={styles.cards} {...provided.droppableProps} ref={provided.innerRef}>
+              {cards.map(cardData => (
+                <Card key={cardData.id} {...cardData}/>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
         <div>
           <Creator text={settings.cardCreatorText} action={addCard}/>
         </div>
