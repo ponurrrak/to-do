@@ -2,7 +2,7 @@ import React from 'react';
 import {Droppable} from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import styles from './Column.scss';
-import Card from '../Card/Card.js';
+import DraggableCard from '../Card/DraggableCard.js';
 import Creator from '../Creator/Creator.js';
 import Icon from '../Icon/Icon.js';
 import {settings} from '../../data/dataStore.js';
@@ -32,7 +32,7 @@ class Column extends React.Component {
           {provided => (
             <div className={styles.cards} {...provided.droppableProps} ref={provided.innerRef}>
               {cards.map(cardData => (
-                <Card key={cardData.id} {...cardData}/>
+                <DraggableCard key={cardData.id} {...cardData}/>
               ))}
               {provided.placeholder}
             </div>

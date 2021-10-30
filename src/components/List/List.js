@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactHtmlParser from 'react-html-parser';
+import {DragDropContext} from 'react-beautiful-dnd';
 import styles from './List.scss';
 import Column from '../Column/ColumnContainer.js';
 import Hero from '../Hero/Hero.js';
@@ -16,6 +17,7 @@ class List extends React.Component {
     image: PropTypes.string.isRequired,
     imageAlt: PropTypes.string.isRequired,
     addColumn: PropTypes.func.isRequired,
+    moveCard: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -23,7 +25,31 @@ class List extends React.Component {
   }
 
   render() {
-    const {title, image, imageAlt, description, columns, addColumn} = this.props;
+    const {title, image, imageAlt, description, columns, addColumn, moveCard} = this.props;
+    const moveCardHandler = result => {
+      if(
+        result.destination
+        &&
+        (
+          result.destination.index != result.source.index
+          ||
+          result.destination.droppableId != result.source.droppableId
+        )
+      ){
+        const payload = {
+          id: result.draggableId,
+          dest: {
+            index: result.destination.index,
+            columnId: result.destination.droppableId,
+          },
+          src: {
+            index: result.source.index,
+            columnId: result.source.droppableId,
+          },
+        };
+        moveCard(payload);
+      }
+    };
     return (
       <Container>
         <section className={styles.component}>
@@ -31,11 +57,13 @@ class List extends React.Component {
           <div className={styles.description}>
             {ReactHtmlParser(description)}
           </div>
-          <div className={styles.columns}>
-            {columns.map(columnData => (
-              <Column key={columnData.id} {...columnData} />
-            ))}
-          </div>
+          <DragDropContext onDragEnd={moveCardHandler}>
+            <div className={styles.columns}>
+              {columns.map(columnData => (
+                <Column key={columnData.id} {...columnData} />
+              ))}
+            </div>
+          </DragDropContext>
           <div className={styles.creator}>
             <Creator text={settings.columnCreatorText} action={addColumn}/>
           </div>
