@@ -9,10 +9,13 @@ import {settings} from '../../data/dataStore.js';
 class SearchResults extends React.Component {
   static propTypes = {
     cards: PropTypes.array.isRequired,
+    match: PropTypes.object.isRequired,
   };
   render() {
     const {cards} = this.props;
-    const {icon, title} = settings.search;
+    const {icon} = settings.search;
+    const searchString = this.props.match.params.searchString;
+    const title = (cards.length && searchString) ? settings.search.titleResultsFound : settings.search.titleNoResults;
     return (
       <Container>
         <section className={styles.component}>

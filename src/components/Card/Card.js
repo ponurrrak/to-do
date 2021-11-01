@@ -8,7 +8,7 @@ class Card extends React.Component {
     provided: PropTypes.object,
   }
   render() {
-    let {title, provided} = this.props;
+    let {title, provided} = this.props;    
     provided = provided ? provided : {};
     return (
       <p
